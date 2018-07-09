@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Venti Uno</title>
+</head>
+
+<body>
+    <script src="js/todo.js"></script>
+    <script src="js/library.js"></script>
+    <link rel="stylesheet" href="semantic-ui/semantic.min.css">
+    <link rel="stylesheet" href="index.css">    
+
+    <div class="ui text container"> 
+        <nav id="title" class="ui success message">
+            Venti Uno are simple apps compiled by Jay Angelo Valmocina. All of which were written in vanilla javascript.
+        </nav>
+        <section class="ui stackable grid">
+            <section class="ui twelve wide column">
+                <section class="ui segment">
+                    <legend class="ui header">
+                        <p>Guess the magic number
+                            <p>
+                    </legend>
+                    <section class="ui form">
+                        <section class="ui field">
+                            <input type="text" id="magicNumber" placeholder="any number from 0 to 100">
+                        </section>
+                        <section class="ui field">
+                            <div class="ui grey button" id="guess">Guess</div>
+                            <div class="ui button" id="clear">Clear</div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="ui four wide column">
+                <section class="ui segment">
+                    <center id="heart"></center>
+                </section>
+            </section>
+        </section>
+        <section id="display" class="ui padded">
+        </section>
+        <section class="ui stackable grid">
+            <section class="ui ten wide column">
+                <section class="ui grey stacked segment">
+                    <center id="word">00:00:00</center>
+                </section>
+            </section>
+            <section class="ui six wide column">
+                <section class="ui segment">
+                    <section class="ui form">
+                        <section class="ui field">
+                            <input type="text" id="time" placeholder="09:45:00PM">
+                        </section>
+                        <section class="ui field">
+                            <div class="ui small grey button" id="convert">Convert Time</div>
+                            <div class="ui small button" id="clean">Clear</div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+
+             <div class="ui segment">
+               <section class="ui form">
+                  <section class="ui field">
+                      <input type="text" id="item" placeholder="item">
+                  </section>
+                  
+                  <section class="ui field">
+                    <button onclick="addTodo()"  id="add" class="ui small grey button">Add</button>
+                  </section>
+               </section>
+            </div>
+            <ul id="list"></ul>     
+     </div>
+        <style>
+            #display {
+                font-family: Helvetica, -apple-system, sans-serif, fantasy;
+                font-size: 17px;
+            }
+
+            #heart {
+                font-weight: bold;
+                font-size: 6em;
+                color: #888;
+            }
+
+            #word {
+                font-weight: bold;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                font-size: 4em;
+                color: #888;
+            }
+
+            #magicNumber {
+                font-family: Helvetica, -apple-system, sans-serif, 'Open Sans';
+                font-size: 1em;
+                color: #555;
+            }
+
+            #title {
+                font-size: 1em;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                color: #777;
+                margin-top: 1em;
+            }
+        </style>
+    </div>
+    <script>
+        const magicNumber = Math.round(Math.random() * 100)
+        let life = 5;
+        
+        window.addEventListener('scroll', () => { 
+            removeClass('title', /message/gi) 
+            innerHtml('title', '')
+        })        
+        //when DOM first mounted
+        window.addEventListener('load', () => {
+            getValue('time') == '' ? addClass('convert', 'disabled') : removeClass('convert', /disabled/gi)
+            getValue('magicNumber') == '' ? addClass('guess', 'disabled') : removeClass('guess', /disabled/gi)
+        })
+        document.getElementById('time').addEventListener('keyup', () => {
+            getValue('time') == '' ? addClass('convert', 'disabled') : removeClass('convert', /disabled/gi)
+            console.log(getValue('time').toString().length)
+        })
+        document.getElementById('magicNumber').addEventListener('keyup', () => {
+            getValue('magicNumber') == '' ? addClass('guess', 'disabled') : removeClass('guess', /disabled/gi)
+        })
+        innerHtml('heart', life)
+        document.getElementById('guess').addEventListener('click', () => {
+            life = life - 1;
+            innerHtml('heart', life)
+            if (life < 1) {
+                addClass('guess', 'disabled')
+            }
+            let answer = getValue('magicNumber')
+            let result = checkIfMagicNumber(answer, life)
+            innerHtml('display', result)
+            answer == '' ? '' : addClass('display', 'segment')
+
+            function checkIfMagicNumber(x, life) {
+                const numberIsGreater = `Your answer is greater than the magic number`
+                const numberIsLower = `Your answer is lower than the magic number`
+                const gameOver = `Game Over ! Magic Number is ${magicNumber}`
+
+                function checkIfLowerOrHigher(x) {
+                    let ifLowerOrHigher = x > magicNumber ? numberIsGreater : numberIsLower
+                    return life == 0 ? gameOver : ifLowerOrHigher;
+                }
+                let checkIfZero = x => x == 0 ? " " : checkIfLowerOrHigher(x);
+                return x == magicNumber ? `You win` : checkIfZero(x);
+            }
+
+        })
+
+        document.getElementById('clear').addEventListener('click', () => {
+            setValue('magicNumber', '')
+            innerHtml('display', '')
+            removeClass('display', /segment/gi)
+            getValue('magicNumber') == '' ? addClass('guess', 'disabled') : removeClass('guess', /disabled/gi)
+        })
+
+        document.getElementById('clean').addEventListener('click', () => {
+            setValue('time', '');
+            innerHtml('word', '00:00:00')
+            getValue('time') == '' ? addClass('convert', 'disabled') : removeClass('convert', /disabled/gi)
+        })
+
+        document.getElementById('convert').addEventListener('click', () => {
+            let timeConverter = function (time) {
+                let hours = Number(time.substring(0, 2));
+                const ifTimeEndsWithPM = time.toLowerCase().endsWith("pm");
+                let changeHour = function (hour) {
+                    let PM = hour != 12 ? (hour + 12) : time.substring(0, 2)
+                    let AM = hour == 12 ? "00" : time.substring(0, 2)
+                    return ifTimeEndsWithPM ? PM : AM;
+                }
+                return time.replace(time.substring(0, 2), changeHour(hours)).toLowerCase().replace(
+                    /(am|pm)/, '');
+            }
+            innerHtml('word', timeConverter(getValue('time')))
+        })
+    </script>
+</body>
+
+</html>
