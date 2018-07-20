@@ -82,7 +82,7 @@
                  <div class="ui four wide column">
                       <div class="ui segment">
                           <h4>Timer</h4>
-                         <span id="time"></span>
+                         <span id="timerX"></span>
                       </div>
                  </div>
              </div>
@@ -126,6 +126,23 @@
         const magicNumber = Math.round(Math.random() * 100)
         let life = 5;
         
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10)
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 500);
+        }
+        
         window.addEventListener('scroll', () => { 
             removeClass('title', /message/gi) 
             innerHtml('title', '')
@@ -134,6 +151,10 @@
         window.addEventListener('load', () => {
             getValue('time') == '' ? addClass('convert', 'disabled') : removeClass('convert', /disabled/gi)
             getValue('magicNumber') == '' ? addClass('guess', 'disabled') : removeClass('guess', /disabled/gi)
+            
+            var fiveMinutes = 60 * 10,
+             display = document.querySelector('#timerX');
+            startTimer(fiveMinutes, display);
         })
         document.getElementById('time').addEventListener('keyup', () => {
             getValue('time') == '' ? addClass('convert', 'disabled') : removeClass('convert', /disabled/gi)
@@ -197,28 +218,9 @@
             innerHtml('word', timeConverter(getValue('time')))
         })
         
-        function startTimer(duration, display) {
-            var timer = duration, minutes, seconds;
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10)
-                seconds = parseInt(timer % 60, 10);
+     
 
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    timer = duration;
-                }
-            }, 500);
-        }
-
-window.onload = function () {
-    var fiveMinutes = 60 * 10,
-        display = document.querySelector('#time');
-    startTimer(fiveMinutes, display);
-};
     </script>
 </body>
 
