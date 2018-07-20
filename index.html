@@ -64,19 +64,29 @@
                 </section>
             </section>
         </section>
+         <div class="ui stackable grid">
+             <div class="ui twelve wide column">
+                <div class="ui segment">
+                   <section class="ui form">
+                      <section class="ui field">
+                          <input type="text" id="item" placeholder="item">
+                      </section>
 
-             <div class="ui segment">
-               <section class="ui form">
-                  <section class="ui field">
-                      <input type="text" id="item" placeholder="item">
-                  </section>
-                  
-                  <section class="ui field">
-                    <button onclick="addTodo()"  id="add" class="ui small grey button">Add</button>
-                  </section>
-               </section>
-            </div>
-            <ul id="list"></ul>     
+                      <section class="ui field">
+                        <button onclick="addTodo()"  id="add" class="ui small grey button">Add</button>
+                      </section>
+                   </section>
+                 </div>
+                 <div class="ui four column">
+                   <h4>Timer</h4>
+                      <div class="ui compact segment">
+                         <span id="time"></span>
+                      </div>
+                 </div>
+            </div> 
+             </div>
+         </div>    
+         <ul id="list"></ul>     
      </div>
         <style>
             #display {
