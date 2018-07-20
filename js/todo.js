@@ -44,8 +44,8 @@ function startTimer(duration, display) {
     }, 500);
 }
 
-// window.onload = function () {
-//     var fiveMinutes = 60 * 10,
-//         display = document.querySelector('#time');
-//     startTimer(fiveMinutes, display);
-// };
+window.onload = function () {
+    var fiveMinutes = 60 * 10,
+        display = document.querySelector('#time');
+    startTimer(fiveMinutes, display);
+};
